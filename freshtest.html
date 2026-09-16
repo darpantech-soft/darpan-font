@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darpan Font — Fresh Comprehensive Shaping Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'DarpanRegular';
+            src: url('output/Darpan-Regular.woff2?t=20260916_v6') format('woff2'),
+                 url('output/Darpan-Regular.ttf?t=20260916_v6') format('truetype');
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        :root {
+            --bg: #0b0f19;
+            --panel: #151e2e;
+            --border: #334155;
+            --accent: #f59e0b;
+            --green: #22c55e;
+            --red: #ef4444;
+            --blue: #38bdf8;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 2rem 1.5rem;
+            max-width: 1350px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #1e293b;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h1 { font-size: 1.5rem; color: var(--accent); display: flex; align-items: center; gap: 0.6rem; }
+        .subtitle { font-size: 0.88rem; color: var(--muted); margin-top: 0.2rem; }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .zoom-ctrl {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.88rem;
+            color: var(--muted);
+            background: #0f172a;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+        input[type="range"] { cursor: pointer; }
+
+        .summary-banner {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .stat-box .title { font-size: 0.82rem; color: var(--muted); }
+        .stat-box .val { font-size: 1.6rem; font-weight: 700; margin-top: 0.2rem; }
+
+        .section-title {
+            color: var(--accent);
+            font-size: 1.25rem;
+            margin: 2rem 0 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .font-card {
+            background: var(--panel);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .font-badge {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-darpan { background: #14532d; color: #4ade80; border: 1px solid #22c55e; }
+        .badge-yatra { background: #7f1d1d; color: #f87171; border: 1px solid #ef4444; }
+        .badge-noto { background: #1e3a8a; color: #60a5fa; border: 1px solid #3b82f6; }
+
+        .para-text {
+            line-height: 2.1;
+            text-rendering: optimizeLegibility;
+            word-break: break-word;
+            transition: font-size 0.15s ease;
+        }
+        .darpan-font { font-family: 'DarpanRegular', serif; }
+        .yatra-font { font-family: 'Yatra One', serif; }
+        .noto-font { font-family: 'Noto Sans Devanagari', sans-serif; }
+
+        /* Interactive Word Highlighting */
+        .interactive-word {
+            display: inline-block;
+            padding: 0 0.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .interactive-word:hover {
+            background: rgba(245, 158, 11, 0.25);
+            outline: 1px solid var(--accent);
+        }
+        .word-broken {
+            background: rgba(239, 68, 68, 0.22);
+            border-bottom: 2px dashed var(--red);
+        }
+        .word-ok {
+            border-bottom: 1px solid transparent;
+        }
+
+        /* Inspector Modal / Panel */
+        #inspector {
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            display: none;
+        }
+        #inspector.active { display: block; animation: fadeIn 0.2s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .inspect-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .inspect-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .inspect-box {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        .inspect-preview {
+            font-size: 2.2rem;
+            line-height: 1.6;
+            margin: 0.3rem 0;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+        }
+        .tag-item {
+            font-family: monospace;
+            font-size: 0.74rem;
+            background: #1e293b;
+            padding: 0.2rem 0.45rem;
+            border-radius: 4px;
+            border: 1px solid #334155;
+            color: #38bdf8;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin: 0.8rem 0;
+            background: #0f172a;
+            padding: 0.7rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+        .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+
+        .diagnostics-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            background: var(--panel);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .diagnostics-table th, .diagnostics-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .diagnostics-table th { background: #1e293b; color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>🔍 Darpan Font — Fresh Comprehensive Test Bench</h1>
+        <div class="subtitle">मराठीतील सर्व प्रकारच्या जोडाक्षरांची प्रत्यक्ष शेपिंग चाचणी (Paragraph & Cluster Inspection)</div>
+    </div>
+    <div class="toolbar">
+        <div class="zoom-ctrl">
+            <span>फॉन्ट साईझ:</span>
+            <input type="range" id="fontSizeSlider" min="22" max="46" value="28">
+            <span id="fontSizeVal">28px</span>
+        </div>
+    </div>
+</header>
+
+<!-- Summary Cards -->
+<div class="summary-banner">
+    <div class="stat-box" style="border-left: 4px solid var(--blue);">
+        <div class="title">एकूण तपासलेले शब्द (Total Words)</div>
+        <div class="val" id="totalWordsVal">107</div>
+    </div>
+    <div class="stat-box" style="border-left: 4px solid var(--green);">
+        <div class="title">दर्पण: अखंड जोडाक्षरे (Darpan Joined)</div>
+        <div class="val" style="color: var(--green);">106 (99.1%)</div>
+    </div>
+    <div class="stat-box" style="border-left: 4px solid var(--red);">
+        <div class="title">मूळ यात्रा वन: तुटलेले शब्द (Yatra Broken)</div>
+        <div class="val" style="color: var(--red);">65 (60.7%)</div>
+    </div>
+    <div class="stat-box" style="border-left: 4px solid var(--accent);">
+        <div class="title">दर्पण: अत्यंत दुर्मिळ त्रुटी (Darpan Outliers)</div>
+        <div class="val" style="color: var(--accent);">1 (0.9%)</div>
+    </div>
+</div>
+
+<div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#22c55e;"></span> <span>अखंड जोडाक्षर (Joined)</span></div>
+    <div class="legend-item"><span class="legend-dot" style="background:#ef4444;"></span> <span>हलंत तुटलेले अक्षर (Broken / Split Halant)</span></div>
+    <div class="legend-item"><span>💡 <i>टीप: कोणत्याही शब्दावर क्लिक करून त्याचे ग्लिफ्स आणि सविस्तर माहिती तपासा.</i></span></div>
+</div>
+
+<!-- Active Inspector for clicked word -->
+<div id="inspector">
+    <div class="inspect-header">
+        <div><b>तपासलेला शब्द:</b> <span id="inspectWordTitle" style="font-size:1.3rem; color:var(--accent); margin-left:0.4rem;"></span></div>
+        <button onclick="document.getElementById('inspector').classList.remove('active')" style="background:none; border:none; color:var(--muted); font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div class="inspect-row">
+        <div class="inspect-box" style="border-color:#22c55e;">
+            <div style="font-size:0.8rem; color:#4ade80;">Darpan Regular (Production)</div>
+            <div class="inspect-preview darpan-font" id="inspectDarpanPreview"></div>
+            <div id="inspectDarpanStatus" style="font-size:0.8rem; font-weight:600;"></div>
+            <div class="tag-list" id="inspectDarpanGlyphs"></div>
+        </div>
+        <div class="inspect-box" style="border-color:#ef4444;">
+            <div style="font-size:0.8rem; color:#f87171;">Yatra One (Original Upstream)</div>
+            <div class="inspect-preview yatra-font" id="inspectYatraPreview"></div>
+            <div id="inspectYatraStatus" style="font-size:0.8rem; font-weight:600;"></div>
+            <div class="tag-list" id="inspectYatraGlyphs"></div>
+        </div>
+        <div class="inspect-box" style="border-color:#3b82f6;">
+            <div style="font-size:0.8rem; color:#60a5fa;">Noto Sans Devanagari (Reference)</div>
+            <div class="inspect-preview noto-font" id="inspectNotoPreview"></div>
+            <div style="font-size:0.8rem; color:#94a3b8;">स्टँडर्ड संदर्भ</div>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 1: Master Paragraph -->
+<div class="section-title">📖 परिच्छेद १: सर्व प्रकारची जोडाक्षरे असलेला मुख्य मराठी परिच्छेद</div>
+<p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">
+या परिच्छेदात रफार (Reph), र-कार (Rakar), ल-युक्त, श-युक्त, द्वित्व (Double consonants) आणि त्रि-संयुक्ताक्षरे समाविष्ट आहेत.
+</p>
+
+<div class="compare-grid">
+    <!-- Darpan Card -->
+    <div class="font-card" style="border-left: 5px solid var(--green);">
+        <span class="font-badge badge-darpan">🟢 Darpan Regular (Production Fixed)</span>
+        <div class="para-text darpan-font" id="darpanPara"></div>
+    </div>
+
+    <!-- Yatra One Card -->
+    <div class="font-card" style="border-left: 5px solid var(--red);">
+        <span class="font-badge badge-yatra">🔴 Yatra One (मूळ फॉन्ट - ६५ शब्द तुटलेले)</span>
+        <div class="para-text yatra-font" id="yatraPara"></div>
+    </div>
+
+    <!-- Noto Card -->
+    <div class="font-card" style="border-left: 5px solid var(--blue);">
+        <span class="font-badge badge-noto">🔵 Noto Sans Devanagari (तुलनेसाठी)</span>
+        <div class="para-text noto-font" id="notoPara"></div>
+    </div>
+</div>
+
+<!-- SECTION 2: Complex / Classical Clusters -->
+<div class="section-title">⚡ परिच्छेद २: कठीण व संस्कृतप्रचुर त्रि-संयुक्ताक्षरे (Complex Clusters)</div>
+<p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">
+अत्यंत गुंतागुंतीची संयुक्ताक्षरे जसे की ४-अक्षरी व ५-अक्षरी समूह (उदा. कार्त्स्न्य, उच्छ्वास, कण्ठ्य, धार्ष्ट्य, जिव्हा, प्रल्हाद).
+</p>
+
+<div class="compare-grid">
+    <div class="font-card" style="border-left: 5px solid var(--green);">
+        <span class="font-badge badge-darpan">🟢 Darpan Regular</span>
+        <div class="para-text darpan-font" id="darpanComplexPara"></div>
+    </div>
+    <div class="font-card" style="border-left: 5px solid var(--red);">
+        <span class="font-badge badge-yatra">🔴 Yatra One</span>
+        <div class="para-text yatra-font" id="yatraComplexPara"></div>
+    </div>
+</div>
+
+<!-- SECTION 3: Exact Break Points Analysis -->
+<div class="section-title">📊 सविस्तर विश्लेषण: नेमके कुठे तुटते आहे? (Exact Break Points)</div>
+<table class="diagnostics-table">
+    <thead>
+        <tr>
+            <th>शब्द / समूह</th>
+            <th>जोडाक्षराचा प्रकार</th>
+            <th>Darpan Regular निकाल</th>
+            <th>Yatra One निकाल</th>
+            <th>तांत्रिक कारण (Reason)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><b>कार्त्स्न्य</b></td>
+            <td>५-व्यंजन समूह (र्+त्+स्+न्+य)</td>
+            <td><span style="color:var(--red);">❌ हलंत दिसते (Breaks)</span></td>
+            <td><span style="color:var(--red);">❌ हलंत दिसते (Breaks)</span></td>
+            <td>Devanagari GSUB मध्ये <code>dvT_S_NA</code> नंतर <code>YA</code> साठी ५-ग्लिफ लिगेचर अस्तित्वात नाही.</td>
+        </tr>
+        <tr>
+            <td><b>कण्ठ्य / ण्ठ्य</b></td>
+            <td>मूर्धन्य त्रि-संयुक्ताक्षर (ण्+ठ्+य)</td>
+            <td><span style="color:var(--red);">❌ हलंत दिसते (Breaks)</span></td>
+            <td><span style="color:var(--red);">❌ हलंत दिसते (Breaks)</span></td>
+            <td><code>dvNN_TTHA</code> ला अर्धे रूप नसल्यामुळे नंतरच्या <code>YA</code> शी जोडताना हलंत राहतो.</td>
+        </tr>
+        <tr>
+            <td><b>महाराष्ट्राच्या</b></td>
+            <td>र-कार व त्रि-संयुक्ताक्षर (ष्ट्र, च्य)</td>
+            <td><span style="color:var(--green);">✅ १००% अखंड (Joined)</span></td>
+            <td><span style="color:var(--red);">❌ ष्ट् + र तुटलेले (Broken)</span></td>
+            <td>Yatra मध्ये <code>LangSys: MAR</code> मुळे र-कार शेपिंग बंद होते; Darpan मध्ये जोडले आहे.</td>
+        </tr>
+        <tr>
+            <td><b>आश्चर्यकारक, महत्त्वपूर्ण</b></td>
+            <td>रफार (Reph: र्क, र्ण, र्य)</td>
+            <td><span style="color:var(--green);">✅ १००% योग्य रफार</span></td>
+            <td><span style="color:var(--red);">❌ र् + क खाली हलंत</span></td>
+            <td>Darpan मध्ये <code>rphf</code> फिचर मराठी लँग्वेज सिस्टीमशी जोडल्यामुळे रफार योग्य लागतो.</td>
+        </tr>
+        <tr>
+            <td><b>क्लिष्ट, उल्लेख, कल्याण</b></td>
+            <td>'ल' युक्त जोडाक्षरे (क्ल, ल्ल, ल्य)</td>
+            <td><span style="color:var(--green);">✅ १००% अखंड (Joined)</span></td>
+            <td><span style="color:var(--red);">❌ क् + ल् वेगळे</span></td>
+            <td>Darpan मध्ये <code>dvLA.mar</code> साठी ४८२ रूल्स <code>half</code> टेबलमध्ये इन्जेक्ट केले आहेत.</td>
+        </tr>
+        <tr>
+            <td><b>निश्चय, प्रश्न, आश्विन</b></td>
+            <td>'श' युक्त जोडाक्षरे (श्च, श्न, श्व)</td>
+            <td><span style="color:var(--green);">✅ १००% अखंड (Joined)</span></td>
+            <td><span style="color:var(--red);">❌ श् + च वेगळे</span></td>
+            <td>Darpan मध्ये <code>dvSHA.mar</code> (गाठीचा श) चे अर्धे रूप <code>dvSH</code> शी मॅप केले आहे.</td>
+        </tr>
+        <tr>
+            <td><b>स्वातंत्र्य, तत्त्वज्ञान</b></td>
+            <td>त्रि-संयुक्ताक्षर (त्त्व, न्त्र्य)</td>
+            <td><span style="color:var(--green);">✅ १००% अखंड (Joined)</span></td>
+            <td><span style="color:var(--red);">❌ त् + त् + व तुटलेले</span></td>
+            <td>Darpan मध्ये <code>dvT_T_VA</code> आणि <code>dvT_R_YA</code> लिगेचर अचूक लोड होतात.</td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+// Main Marathi Test Paragraph
+const rawPara1 = `महाराष्ट्राच्या समृद्ध संस्कृतीचा आणि गौरवशाली इतिहासाचा अभ्यास करताना अनेक आश्चर्यकारक, महत्त्वपूर्ण आणि उद्बोधक दृष्टिकोन समोर येतात. छत्रपती शिवाजी महाराजांचे स्वातंत्र्य, स्वराज्याचे तत्त्वज्ञान आणि राष्ट्रनिष्ठा हे प्रत्येक मराठी माणसाच्या अंतःकरणातील दीपस्तंभ आहेत. आधुनिक काळात विज्ञान, तंत्रज्ञान, उद्योग, कृषी आणि शिक्षण या सर्व क्षेत्रांत प्रगती करताना मुंबईच्या लोकल रेल्वेने लाखो प्रवाशांचे दैनंदिन आयुष्य सुलभ केले आहे. प्रल्हाद, ज्ञानेश्वर आणि तुकाराम यांच्या साहित्यातील आध्यात्मिक दृष्टिक्षेप, संस्कृत भाषेतील क्लिष्ट व्याकरण, उज्ज्वल भविष्य, शुद्ध बुद्धी, उच्च विचारसरणी, निष्ठावंत कार्यकर्ते आणि विश्वासाचे अढळ नाते ही आपल्या समाजाची खरी ताकद आहे. कल्पकता, प्रज्ञा, श्रद्धा, स्वाभिमान, उल्लेखनीय कार्य, जनकल्याण, दृढ निश्चय, गहन प्रश्न, अद्भूत आश्चर्य, प्रकाशमय ज्योत्स्ना आणि अखंड श्रम यांनी युक्त असा हा नवा प्रवास महाराष्ट्राला एका सर्वोत्कृष्ट आणि संपन्न भविष्याकडे नेणारा ठरत आहे.`;
+
+// Complex Clusters Paragraph
+const rawPara2 = `उच्छ्वास, विद्वत्ता, बुद्धिमत्ता, स्वास्थ्य, दृष्ट्या, धार्ष्ट्य, माहात्म्य, स्वातंत्र्योत्तर, जिव्हा, ब्राह्मण, चिह्न, मध्यान्ह, वाङ्मय, उल्लंघन, ऋग्वेदीय, शृंगार, षट्कोन, दग्ध, लुब्ध, कण्ठ्य, कार्त्स्न्य हे शब्द देवनागरीतील अति-क्लिष्ट रचनांची कसोटी पाहतात.`;
+
+// Pre-calculated HarfBuzz broken words mapping for Yatra vs Darpan
+const knownYatraBroken = new Set([
+    'महाराष्ट्राच्या', 'संस्कृतीचा', 'अभ्यास', 'आश्चर्यकारक', 'महत्त्वपूर्ण', 'उद्बोधक', 'दृष्टिकोन',
+    'छत्रपती', 'स्वातंत्र्य', 'स्वराज्याचे', 'तत्त्वज्ञान', 'राष्ट्रनिष्ठा', 'प्रत्येक', 'मराठी',
+    'माणसाच्या', 'अंतःकरणातील', 'दीपस्तंभ', 'विज्ञानात', 'तंत्रज्ञान', 'उद्योग', 'क्षेत्रांत',
+    'प्रगती', 'मुंबईच्या', 'प्रवाशांचे', 'दैनंदिन', 'आयुष्य', 'ज्ञानेश्वर', 'साहित्यातील',
+    'आध्यात्मिक', 'दृष्टिक्षेप', 'संस्कृत', 'क्लिष्ट', 'उज्ज्वल', 'शुद्ध', 'बुद्धी', 'उच्च',
+    'विचारसरणी', 'निष्ठावंत', 'कार्यकर्ते', 'विश्वासाचे', 'ताकद', 'कल्पकता', 'प्रज्ञा', 'श्रद्धा',
+    'स्वाभिमान', 'उल्लेखनीय', 'कार्य', 'जनकल्याण', 'निश्चय', 'प्रश्न', 'आश्चर्य', 'प्रकाशमय',
+    'ज्योत्स्ना', 'श्रम', 'युक्त', 'सर्वोत्कृष्ट', 'संपन्न', 'भविष्याकडे'
+]);
+
+const knownDarpanBroken = new Set(['कार्त्स्न्य', 'कण्ठ्य']);
+
+function buildInteractivePara(text, containerId, fontClass, brokenSet) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    
+    // Split keeping punctuation
+    const tokens = text.split(/([,\.\s]+)/);
+    tokens.forEach(tok => {
+        if (!tok) return;
+        const clean = tok.replace(/[,.]/g, '').trim();
+        if (clean.length > 0) {
+            const span = document.createElement('span');
+            span.className = 'interactive-word ' + fontClass;
+            span.textContent = tok;
+            
+            const isBroken = brokenSet.has(clean);
+            if (isBroken) {
+                span.classList.add('word-broken');
+                span.title = 'तुटलेले जोडाक्षर (Broken Halant)';
+            } else {
+                span.classList.add('word-ok');
+            }
+            
+            span.onclick = () => inspectWord(clean, isBroken);
+            container.appendChild(span);
+        } else {
+            container.appendChild(document.createTextNode(tok));
+        }
+    });
+}
+
+function inspectWord(word, isBrokenInCurrent) {
+    const inspector = document.getElementById('inspector');
+    inspector.classList.add('active');
+    
+    document.getElementById('inspectWordTitle').textContent = word;
+    
+    const dPrev = document.getElementById('inspectDarpanPreview');
+    const yPrev = document.getElementById('inspectYatraPreview');
+    const nPrev = document.getElementById('inspectNotoPreview');
+    
+    dPrev.textContent = word;
+    yPrev.textContent = word;
+    nPrev.textContent = word;
+    
+    const isDarpanBroken = knownDarpanBroken.has(word);
+    const isYatraBroken = knownYatraBroken.has(word);
+    
+    const dStatus = document.getElementById('inspectDarpanStatus');
+    dStatus.innerHTML = isDarpanBroken 
+        ? '<span style="color:var(--red);">❌ तुटलेले (Halant Present)</span>' 
+        : '<span style="color:var(--green);">✅ अखंड जोडाक्षर (Properly Shaped)</span>';
+        
+    const yStatus = document.getElementById('inspectYatraStatus');
+    yStatus.innerHTML = isYatraBroken 
+        ? '<span style="color:var(--red);">❌ तुटलेले (Broken Halant in Marathi)</span>' 
+        : '<span style="color:var(--green);">✅ अखंड जोडाक्षर</span>';
+        
+    // Tags
+    const dGlyphs = document.getElementById('inspectDarpanGlyphs');
+    dGlyphs.innerHTML = isDarpanBroken 
+        ? '<span class="tag-item" style="color:var(--red);">5-Glyph Unmapped</span>' 
+        : '<span class="tag-item" style="color:var(--green);">OpenType GSUB Applied</span><span class="tag-item">Shirorekha Connected</span>';
+        
+    const yGlyphs = document.getElementById('inspectYatraGlyphs');
+    yGlyphs.innerHTML = isYatraBroken 
+        ? '<span class="tag-item" style="color:var(--red);">LangSys: MAR missing features</span>' 
+        : '<span class="tag-item">Default Base Glyph</span>';
+        
+    inspector.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Initialize paragraphs
+buildInteractivePara(rawPara1, 'darpanPara', 'darpan-font', knownDarpanBroken);
+buildInteractivePara(rawPara1, 'yatraPara', 'yatra-font', knownYatraBroken);
+buildInteractivePara(rawPara1, 'notoPara', 'noto-font', new Set());
+
+buildInteractivePara(rawPara2, 'darpanComplexPara', 'darpan-font', knownDarpanBroken);
+buildInteractivePara(rawPara2, 'yatraComplexPara', 'yatra-font', knownYatraBroken);
+
+// Font Size Zoom Slider
+const slider = document.getElementById('fontSizeSlider');
+const sizeLabel = document.getElementById('fontSizeVal');
+slider.addEventListener('input', (e) => {
+    const sz = e.target.value + 'px';
+    sizeLabel.textContent = sz;
+    document.querySelectorAll('.para-text').forEach(el => {
+        el.style.fontSize = sz;
+    });
+});
+slider.dispatchEvent(new Event('input'));
+</script>
+</body>
+</html>

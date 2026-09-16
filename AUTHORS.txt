@@ -1,0 +1,4 @@
+# Official list of Darpan project authors for copyright purposes.
+
+Catherine Leigh Schmidt <hi@cath.land> (Original Yatra One Type Designer)
+The Darpan Project Maintainers & Marathi OpenType Engineers

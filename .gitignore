@@ -1,0 +1,15 @@
+# Virtual Environments
+build-env/
+venv/
+env/
+.venv/
+
+# Archives & Temporary files
+*.zip
+*.pyc
+__pycache__/
+.DS_Store
+Thumbs.db
+
+# Scratch and test caches
+scratch/

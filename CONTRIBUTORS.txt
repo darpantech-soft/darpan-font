@@ -1,0 +1,5 @@
+# List of contributors to the Darpan font project.
+
+Catherine Leigh Schmidt <hi@cath.land>
+Dave Crossland <dave@lab6.com>
+The Darpan Font Engineering Team

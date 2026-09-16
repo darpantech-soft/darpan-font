@@ -1,0 +1,35 @@
+#!opentype
+
+# This file must be synced to `masters/instances`.
+# `l` is the style-linking family name. `m` is deprecated.
+
+# [PostScriptName]
+#   f = Preferred Family Name
+#   s = Subfamily Name (Style Name)
+#   l = Compatible Family Menu Name
+#   m = 1, Macintosh Compatible Full Name
+
+# [YatraOne-Light]
+#  f = YatraOne
+#  s = Light
+#  l = Yatra Light
+
+[YatraOne]
+  f = YatraOne
+  s = Regular
+  l = YatraOne Regular
+
+# [YatraOne-Medium]
+#  f = YatraOne
+#  s = Medium
+#  l = Yatra Medium
+
+# [YatraOne-SemiBold]
+#  f = YatraOne
+#  s = SemiBold
+#  l = Yatra SemiBold
+
+# [YatraOne-Bold]
+#  f = Yatra
+#  s = Bold
+  # styles/Bold/fontinfo: IsBoldStyle true

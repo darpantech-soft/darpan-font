@@ -1,0 +1,12 @@
+#!opentype
+
+# `FontMenuNameDB` must be synced to this file.
+# Key `IsBold` has nothing to do with style-linking.
+
+#KEYS:FamilyName	FontName	FullName	Weight	Coords	IsBold
+
+Yatra	Yatra-Light	Yatra Light	Light	(0)	0
+Yatra	Yatra-Regular	Yatra	Regular	(210)	0
+Yatra	Yatra-Medium	Yatra Medium	Medium	(440)	0
+Yatra	Yatra-SemiBold	Yatra SemiBold	SemiBold	(700)	0
+Yatra	Yatra-Bold	Yatra Bold	Bold	(1000)	0

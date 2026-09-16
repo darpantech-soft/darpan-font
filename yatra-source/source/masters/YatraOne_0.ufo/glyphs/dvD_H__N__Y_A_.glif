@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="dvDH_N_YA" format="1">
+  <advance width="1090"/>
+  <outline>
+    <contour>
+      <point x="368" y="148" type="line"/>
+      <point x="368" y="148"/>
+      <point x="106" y="30"/>
+      <point x="90" y="19" type="curve"/>
+      <point x="45" y="-28"/>
+      <point x="29" y="-114"/>
+      <point x="100" y="-144" type="curve" smooth="yes"/>
+      <point x="145" y="-165"/>
+      <point x="177" y="-174"/>
+      <point x="235" y="-190" type="curve" smooth="yes"/>
+      <point x="285" y="-203"/>
+      <point x="377" y="-55"/>
+      <point x="274" y="3" type="curve"/>
+      <point x="407" y="62" type="line"/>
+    </contour>
+    <contour>
+      <point x="225" y="-21" type="curve"/>
+      <point x="248" y="-91"/>
+      <point x="193" y="-146"/>
+      <point x="151" y="-115" type="curve" smooth="yes"/>
+      <point x="115" y="-86"/>
+      <point x="172" y="-37"/>
+    </contour>
+    <component base="dvDH"/>
+    <component base="dvYA" xOffset="427"/>
+  </outline>
+</glyph>
