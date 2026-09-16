@@ -436,21 +436,19 @@ const rawPara1 = `महाराष्ट्राच्या समृद्�
 // Complex Clusters Paragraph
 const rawPara2 = `उच्छ्वास, विद्वत्ता, बुद्धिमत्ता, स्वास्थ्य, दृष्ट्या, धार्ष्ट्य, माहात्म्य, स्वातंत्र्योत्तर, जिव्हा, ब्राह्मण, चिह्न, मध्यान्ह, वाङ्मय, उल्लंघन, ऋग्वेदीय, शृंगार, षट्कोन, दग्ध, लुब्ध, कण्ठ्य, कार्त्स्न्य हे शब्द देवनागरीतील अति-क्लिष्ट रचनांची कसोटी पाहतात.`;
 
-// Pre-calculated HarfBuzz broken words mapping for Yatra vs Darpan
-const knownYatraBroken = new Set([
-    'महाराष्ट्राच्या', 'संस्कृतीचा', 'अभ्यास', 'आश्चर्यकारक', 'महत्त्वपूर्ण', 'उद्बोधक', 'दृष्टिकोन',
-    'छत्रपती', 'स्वातंत्र्य', 'स्वराज्याचे', 'तत्त्वज्ञान', 'राष्ट्रनिष्ठा', 'प्रत्येक', 'मराठी',
-    'माणसाच्या', 'अंतःकरणातील', 'दीपस्तंभ', 'विज्ञानात', 'तंत्रज्ञान', 'उद्योग', 'क्षेत्रांत',
-    'प्रगती', 'मुंबईच्या', 'प्रवाशांचे', 'दैनंदिन', 'आयुष्य', 'ज्ञानेश्वर', 'साहित्यातील',
-    'आध्यात्मिक', 'दृष्टिक्षेप', 'संस्कृत', 'क्लिष्ट', 'उज्ज्वल', 'शुद्ध', 'बुद्धी', 'उच्च',
-    'विचारसरणी', 'निष्ठावंत', 'कार्यकर्ते', 'विश्वासाचे', 'ताकद', 'कल्पकता', 'प्रज्ञा', 'श्रद्धा',
-    'स्वाभिमान', 'उल्लेखनीय', 'कार्य', 'जनकल्याण', 'निश्चय', 'प्रश्न', 'आश्चर्य', 'प्रकाशमय',
-    'ज्योत्स्ना', 'श्रम', 'युक्त', 'सर्वोत्कृष्ट', 'संपन्न', 'भविष्याकडे'
-]);
+// In Yatra One under lang="mr", EVERY conjunct containing virama (\u094D) breaks
+// because LangSys: MAR disables rphf, half, akhn, and pres tables.
+function isYatraBrokenWord(word) {
+    return word.includes('\u094D');
+}
 
+// In Darpan, only extreme unmapped clusters (like 5-consonant 'कार्त्स्न्य' or 'कण्ठ्य') break
 const knownDarpanBroken = new Set(['कार्त्स्न्य', 'कण्ठ्य']);
+function isDarpanBrokenWord(word) {
+    return knownDarpanBroken.has(word);
+}
 
-function buildInteractivePara(text, containerId, fontClass, brokenSet) {
+function buildInteractivePara(text, containerId, fontClass) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     
@@ -464,7 +462,13 @@ function buildInteractivePara(text, containerId, fontClass, brokenSet) {
             span.className = 'interactive-word ' + fontClass;
             span.textContent = tok;
             
-            const isBroken = brokenSet.has(clean);
+            let isBroken = false;
+            if (fontClass.includes('yatra')) {
+                isBroken = isYatraBrokenWord(clean);
+            } else if (fontClass.includes('darpan')) {
+                isBroken = isDarpanBrokenWord(clean);
+            }
+            
             if (isBroken) {
                 span.classList.add('word-broken');
                 span.title = 'तुटलेले जोडाक्षर (Broken Halant)';
@@ -472,7 +476,7 @@ function buildInteractivePara(text, containerId, fontClass, brokenSet) {
                 span.classList.add('word-ok');
             }
             
-            span.onclick = () => inspectWord(clean, isBroken);
+            span.onclick = () => inspectWord(clean);
             container.appendChild(span);
         } else {
             container.appendChild(document.createTextNode(tok));
@@ -480,7 +484,7 @@ function buildInteractivePara(text, containerId, fontClass, brokenSet) {
     });
 }
 
-function inspectWord(word, isBrokenInCurrent) {
+function inspectWord(word) {
     const inspector = document.getElementById('inspector');
     inspector.classList.add('active');
     
@@ -494,8 +498,8 @@ function inspectWord(word, isBrokenInCurrent) {
     yPrev.textContent = word;
     nPrev.textContent = word;
     
-    const isDarpanBroken = knownDarpanBroken.has(word);
-    const isYatraBroken = knownYatraBroken.has(word);
+    const isDarpanBroken = isDarpanBrokenWord(word);
+    const isYatraBroken = isYatraBrokenWord(word);
     
     const dStatus = document.getElementById('inspectDarpanStatus');
     dStatus.innerHTML = isDarpanBroken 
@@ -505,7 +509,7 @@ function inspectWord(word, isBrokenInCurrent) {
     const yStatus = document.getElementById('inspectYatraStatus');
     yStatus.innerHTML = isYatraBroken 
         ? '<span style="color:var(--red);">❌ तुटलेले (Broken Halant in Marathi)</span>' 
-        : '<span style="color:var(--green);">✅ अखंड जोडाक्षर</span>';
+        : '<span style="color:var(--green);">✅ अखंड जोडाक्षर (No Conjunct)</span>';
         
     // Tags
     const dGlyphs = document.getElementById('inspectDarpanGlyphs');
@@ -516,18 +520,18 @@ function inspectWord(word, isBrokenInCurrent) {
     const yGlyphs = document.getElementById('inspectYatraGlyphs');
     yGlyphs.innerHTML = isYatraBroken 
         ? '<span class="tag-item" style="color:var(--red);">LangSys: MAR missing features</span>' 
-        : '<span class="tag-item">Default Base Glyph</span>';
+        : '<span class="tag-item">No Halant</span>';
         
     inspector.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // Initialize paragraphs
-buildInteractivePara(rawPara1, 'darpanPara', 'darpan-font', knownDarpanBroken);
-buildInteractivePara(rawPara1, 'yatraPara', 'yatra-font', knownYatraBroken);
-buildInteractivePara(rawPara1, 'notoPara', 'noto-font', new Set());
+buildInteractivePara(rawPara1, 'darpanPara', 'darpan-font');
+buildInteractivePara(rawPara1, 'yatraPara', 'yatra-font');
+buildInteractivePara(rawPara1, 'notoPara', 'noto-font');
 
-buildInteractivePara(rawPara2, 'darpanComplexPara', 'darpan-font', knownDarpanBroken);
-buildInteractivePara(rawPara2, 'yatraComplexPara', 'yatra-font', knownYatraBroken);
+buildInteractivePara(rawPara2, 'darpanComplexPara', 'darpan-font');
+buildInteractivePara(rawPara2, 'yatraComplexPara', 'yatra-font');
 
 // Font Size Zoom Slider
 const slider = document.getElementById('fontSizeSlider');
