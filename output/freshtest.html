@@ -8,8 +8,9 @@
     <style>
         @font-face {
             font-family: 'DarpanRegular';
-            src: url('Darpan-Regular.woff2?t=20260916_v6') format('woff2'),
-                 url('Darpan-Regular.ttf?t=20260916_v6') format('truetype');
+            src: url('fonts/woff2/Darpan-Regular.woff2?t=20260916_v6') format('woff2'),
+                 url('fonts/ttf/Darpan-Regular.ttf?t=20260916_v6') format('truetype'),
+                 url('output/Darpan-Regular.woff2?t=20260916_v6') format('woff2');
             font-weight: 400;
             font-display: swap;
         }
@@ -540,5 +541,10 @@ slider.addEventListener('input', (e) => {
 });
 slider.dispatchEvent(new Event('input'));
 </script>
+
+<footer style="margin-top: 3rem; padding: 1.5rem; background: #1e293b; border-radius: 10px; border: 1px solid var(--border); text-align: center; font-size: 0.85rem; color: var(--muted);">
+    <p><b>दर्पण (Darpan Font)</b> — Engineered by <b>Tanaji Padwal</b>, <b>DARPAN TECHNOLOGIES</b> (Pune, Maharashtra, India)</p>
+    <p style="margin-top: 0.3rem;">Contact: <a href="mailto:darpantechnologies26@gmail.com" style="color: var(--blue); text-decoration: none;">darpantechnologies26@gmail.com</a> | Licensed under <a href="OFL.txt" style="color: var(--accent); text-decoration: none;">SIL Open Font License 1.1</a></p>
+</footer>
 </body>
 </html>
