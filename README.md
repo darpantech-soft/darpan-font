@@ -75,6 +75,8 @@ This will:
 Darpan is licensed under the **SIL Open Font License, Version 1.1** ([`OFL.txt`](./OFL.txt)).
 You are free to use, study, modify, and redistribute this font freely in digital, web, and print projects.
 
-### Attribution
+### Attribution & Maintainer
 * **Original Yatra One Design:** Catherine Leigh Schmidt
-* **Marathi OpenType Engineering & Darpan Maintainers:** The Darpan Project Authors
+* **Darpan Project Lead & Marathi OpenType Engineering:** Tanaji Padwal
+* **Organization:** DARPAN TECHNOLOGIES, Pune, Maharashtra, India
+* **Contact:** darpantechnologies26@gmail.com

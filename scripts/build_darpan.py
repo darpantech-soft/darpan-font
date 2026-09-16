@@ -287,13 +287,19 @@ def apply_conjunct_and_marathi_rules(font):
 def update_metadata(font):
     """Set proper font metadata and name table records."""
     name_map = {
+        0: 'Copyright (c) 2016, The Yatra Project Authors. Copyright (c) 2026, Tanaji Padwal, DARPAN TECHNOLOGIES.',
         1: 'Darpan',
         2: 'Regular',
         3: 'Darpan-Regular',
         4: 'Darpan Regular',
         5: 'Version 6.000; 2026 (Marathi Fixed)',
         6: 'Darpan-Regular',
-        9: 'Catherine Leigh Schmidt (original), Modified for Marathi Web Conjuncts',
+        7: 'Darpan is a trademark of DARPAN TECHNOLOGIES.',
+        8: 'DARPAN TECHNOLOGIES',
+        9: 'Catherine Leigh Schmidt (Original Design); Tanaji Padwal, DARPAN TECHNOLOGIES (Marathi OpenType Engineering)',
+        11: 'mailto:darpantechnologies26@gmail.com',
+        13: 'This Font Software is licensed under the SIL Open Font License, Version 1.1.',
+        14: 'https://openfontlicense.org',
         16: 'Darpan',
         17: 'Regular',
     }
