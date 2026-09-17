@@ -100,3 +100,21 @@ Tested on a comprehensive Marathi text containing all conjunct categories:
 Darpan is deployed live in production on:
 * **Website:** [vanshflow.com](https://vanshflow.com)
 * **Status:** Verified flawless rendering in Chrome, Edge, Safari, and Firefox.
+
+---
+
+## 6. Pan-Devanagari Multi-Language Support
+
+Because Darpan's OpenType GSUB tables (`rphf`, `half`, `akhn`, `pres`, `blwf`, `abvs`) are comprehensively synchronized across both `dev2` (default Devanagari) and `LangSys: MAR` (Marathi localized system), the font provides robust shaping and visual continuity for all major Devanagari-written languages:
+1. **Marathi (मराठी)** — `<html lang="mr">`
+2. **Sanskrit (संस्कृत)** — `<html lang="sa">`
+3. **Hindi (हिंदी)** — `<html lang="hi">`
+4. **Nepali (नेपाळी)** — `<html lang="ne">`
+5. **Konkani (कोकणी)** — `<html lang="kok">`
+6. **Maithili (मैथिली)** — `<html lang="mai">`
+7. **Bhojpuri (भोजपुरी)** — `<html lang="bho">`
+8. **Sindhi (सिंधी - Devanagari)** — `<html lang="sd">`
+9. **Dogri (डोगरी)** — `<html lang="doi">`
+10. **Bodo (बोडो)** — `<html lang="brx">`
+11. **Santhali (संथाली - Devanagari)** — `<html lang="sat">`
+

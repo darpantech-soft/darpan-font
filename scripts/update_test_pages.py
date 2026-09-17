@@ -386,8 +386,12 @@ html_content = f"""<!DOCTYPE html>
     </div>
 </header>
 
-<div style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.4); border-left: 4px solid var(--green); border-radius: 8px; padding: 0.9rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.88rem; line-height: 1.6;">
+<div style="background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.4); border-left: 4px solid var(--green); border-radius: 8px; padding: 0.9rem 1.2rem; margin-bottom: 0.8rem; font-size: 0.88rem; line-height: 1.6;">
     <b style="color: #4ade80;">🚀 रिअल-वर्ल्ड केस स्टडी (vanshflow.com):</b> मूळ <i>Yatra One</i> फॉन्ट वेबसाईट्सवर (<code style="color:#f59e0b;">&lt;html lang="mr"&gt;</code>) वापरल्यास मराठीतील ६०% पेक्षा जास्त जोडाक्षरे (जसे 'महाराष्ट्राच्या', 'क्लिष्ट', 'निश्चय', 'आश्चर्यकारक') तुटून हलंत दिसत होते. <b>Darpan</b> मध्ये हा OpenType GSUB दोष पूर्णपणे सोडवून <b><a href="https://vanshflow.com" target="_blank" style="color: var(--blue); font-weight: 600; text-decoration: underline;">vanshflow.com</a></b> वर यशस्वीरित्या लाइव्ह डिप्लॉय करण्यात आला आहे.
+</div>
+
+<div style="background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.3); border-left: 4px solid var(--blue); border-radius: 8px; padding: 0.8rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.86rem; line-height: 1.6;">
+    <b style="color: #38bdf8;">🌐 समर्थित देवनागरी भाषा (Pan-Devanagari Support):</b> हा फॉन्ट <b>मराठी, संस्कृत, हिंदी, नेपाळी, कोकणी, मैथिली, भोजपुरी, सिंधी, डोगरी, बोडो</b> आणि <b>संथाली</b> या सर्व देवनागरी आधारित प्रादेशिक व राष्ट्रीय भाषांसाठी पूर्णपणे सुसंगत आणि उपयुक्त आहे.
 </div>
 
 <!-- Summary Cards -->
