@@ -46,18 +46,24 @@ To solve this for [vanshflow.com](https://vanshflow.com) and the broader Marathi
 
 ---
 
-## 📦 Font Files
+## 📦 Font Family Files (फॉन्ट फॅमिली फाईल्स)
 
 Production-ready font binaries are located in the [`fonts/`](./fonts) folder:
-* **TrueType Font:** [`fonts/ttf/Darpan-Regular.ttf`](./fonts/ttf/Darpan-Regular.ttf) (~215 KB)
-* **Web Open Font Format 2:** [`fonts/woff2/Darpan-Regular.woff2`](./fonts/woff2/Darpan-Regular.woff2) (~69 KB)
+
+| Weight | TrueType (`.ttf`) | Web Open Font (`.woff2`) | Size (`.woff2`) | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Regular (400)** | [`fonts/ttf/Darpan-Regular.ttf`](./fonts/ttf/Darpan-Regular.ttf) | [`fonts/woff2/Darpan-Regular.woff2`](./fonts/woff2/Darpan-Regular.woff2) | ~69 KB | मूळ वजन, बॉडी व मजकुरासाठी |
+| **Medium (500)** | [`fonts/ttf/Darpan-Medium.ttf`](./fonts/ttf/Darpan-Medium.ttf) | [`fonts/woff2/Darpan-Medium.woff2`](./fonts/woff2/Darpan-Medium.woff2) | ~72 KB | सब-हेडिंग व ठळक मजकुरासाठी |
+| **SemiBold (600)** | [`fonts/ttf/Darpan-SemiBold.ttf`](./fonts/ttf/Darpan-SemiBold.ttf) | [`fonts/woff2/Darpan-SemiBold.woff2`](./fonts/woff2/Darpan-SemiBold.woff2) | ~73 KB | कार्ड टायटल्स व बटनांसाठी |
+| **Bold (700)** | [`fonts/ttf/Darpan-Bold.ttf`](./fonts/ttf/Darpan-Bold.ttf) | [`fonts/woff2/Darpan-Bold.woff2`](./fonts/woff2/Darpan-Bold.woff2) | ~73 KB | मुख्य हेडिंग्ज व डिस्प्लेसाठी |
 
 ---
 
 ## 💻 Web Usage (HTML & CSS)
 
-### 1. Download & Include via `@font-face`
+### 1. Include Entire Family via `@font-face`
 ```css
+/* Regular 400 */
 @font-face {
     font-family: 'Darpan';
     src: url('fonts/woff2/Darpan-Regular.woff2') format('woff2'),
@@ -67,13 +73,56 @@ Production-ready font binaries are located in the [`fonts/`](./fonts) folder:
     font-display: swap;
 }
 
+/* Medium 500 */
+@font-face {
+    font-family: 'Darpan';
+    src: url('fonts/woff2/Darpan-Medium.woff2') format('woff2'),
+         url('fonts/ttf/Darpan-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* SemiBold 600 */
+@font-face {
+    font-family: 'Darpan';
+    src: url('fonts/woff2/Darpan-SemiBold.woff2') format('woff2'),
+         url('fonts/ttf/Darpan-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Bold 700 */
+@font-face {
+    font-family: 'Darpan';
+    src: url('fonts/woff2/Darpan-Bold.woff2') format('woff2'),
+         url('fonts/ttf/Darpan-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Application */
 body {
     font-family: 'Darpan', serif;
+    font-weight: 400;
+}
+h2, h3 {
+    font-family: 'Darpan', serif;
+    font-weight: 600;
+}
+h1 {
+    font-family: 'Darpan', serif;
+    font-weight: 700;
 }
 ```
 
-### 2. Live Test Suite
-Open [`freshtest.html`](./freshtest.html) in any modern browser to view the interactive test bench comparing Darpan against Yatra One and Noto Sans Devanagari.
+### 2. Live Interactive Test Suite
+Open [`index.html`](./index.html) or [`freshtest.html`](./freshtest.html) in any modern browser to view:
+* Multi-weight live preview (Regular 400, Medium 500, SemiBold 600, Bold 700).
+* Interactive weight switcher and font-size zoom slider.
+* Word-by-word shaping inspector comparing Darpan against Yatra One and Noto Sans Devanagari.
 
 ---
 
