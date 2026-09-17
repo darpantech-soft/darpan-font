@@ -15,8 +15,10 @@ Features:
 
 import os
 import sys
+import shutil
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.tables import otTables
+from fontTools.ttLib.tables._g_l_y_f import Glyph, GlyphComponent
 import uharfbuzz as hb
 
 
@@ -284,6 +286,82 @@ def apply_conjunct_and_marathi_rules(font):
     print("Marathi LangSys (MAR) and DefaultLangSys successfully synchronized with all features!")
 
 
+def apply_aa_bindi_fixes(font):
+    """
+    Fix upstream Yatra One Issue #5:
+    'Bindi' should be centred on top of 'Aa' (e.g. चांद, पांव, हां, माँ, गाँव, दांत, सांस).
+    In Yatra One, dvmAA has advance width 269 but no anchor or ligature for dvAnusvara or dvCandrabindu,
+    causing the bindi to float 214 units to the right, over the following character.
+    Here, we synthesize composite glyphs:
+      - dvmAA_Anusvara: dvmAA + dvAnusvara centered over dvmAA stem (at x = 133).
+      - dvmAA_Candrabindu: dvmAA + dvCandrabindu centered over dvmAA stem.
+    And wire dvmAA + dvAnusvara -> dvmAA_Anusvara, dvmAA + dvCandrabindu -> dvmAA_Candrabindu
+    into the GSUB abvs ligature lookups.
+    """
+    glyf = font['glyf']
+    hmtx = font['hmtx']
+    gsub = font['GSUB'].table
+
+    # 1. Create dvmAA_Anusvara composite glyph
+    comp_aa = GlyphComponent()
+    comp_aa.glyphName = 'dvmAA'
+    comp_aa.x = 0
+    comp_aa.y = 0
+    comp_aa.flags = 0x0204
+
+    comp_anu = GlyphComponent()
+    comp_anu.glyphName = 'dvAnusvara'
+    comp_anu.x = 55
+    comp_anu.y = 0
+    comp_anu.flags = 0
+
+    g_lig = Glyph()
+    g_lig.numberOfContours = -1
+    g_lig.components = [comp_aa, comp_anu]
+    glyf['dvmAA_Anusvara'] = g_lig
+    hmtx['dvmAA_Anusvara'] = (269, -5)
+
+    # 2. Create dvmAA_Candrabindu composite glyph
+    comp_can = GlyphComponent()
+    comp_can.glyphName = 'dvCandrabindu'
+    comp_can.x = 320
+    comp_can.y = 0
+    comp_can.flags = 0
+
+    g_lig_can = Glyph()
+    g_lig_can.numberOfContours = -1
+    g_lig_can.components = [comp_aa, comp_can]
+    glyf['dvmAA_Candrabindu'] = g_lig_can
+    hmtx['dvmAA_Candrabindu'] = (269, -5)
+
+    # Register glyph order
+    glyph_order = font.getGlyphOrder()
+    for gname in ['dvmAA_Anusvara', 'dvmAA_Candrabindu']:
+        if gname not in glyph_order:
+            glyph_order.append(gname)
+    font.setGlyphOrder(glyph_order)
+
+    # 3. Add to GSUB abvs ligature lookup (Lookup 17)
+    lookup17 = gsub.LookupList.Lookup[17]
+    subtable = lookup17.SubTable[0]
+
+    lig_anu = otTables.Ligature()
+    lig_anu.Component = ['dvAnusvara']
+    lig_anu.LigGlyph = 'dvmAA_Anusvara'
+
+    lig_can = otTables.Ligature()
+    lig_can.Component = ['dvCandrabindu']
+    lig_can.LigGlyph = 'dvmAA_Candrabindu'
+
+    if 'dvmAA' not in subtable.ligatures:
+        subtable.ligatures['dvmAA'] = []
+
+    subtable.ligatures['dvmAA'].append(lig_anu)
+    subtable.ligatures['dvmAA'].append(lig_can)
+
+    print("Added dvmAA_Anusvara and dvmAA_Candrabindu ligatures to abvs lookup (resolving Issue #5)!")
+
+
 def update_metadata(font):
     """Set proper font metadata and name table records."""
     name_map = {
@@ -391,10 +469,13 @@ def main():
     # 2. Conjunct and Marathi rules
     apply_conjunct_and_marathi_rules(font)
 
-    # 3. Metadata
+    # 3. Aa-matra centered bindi & chandrabindu fix (Issue #5)
+    apply_aa_bindi_fixes(font)
+
+    # 4. Metadata
     update_metadata(font)
 
-    # 4. Save TTF & WOFF2
+    # 5. Save TTF & WOFF2
     print(f"\nSaving TTF: {out_ttf}")
     font.save(out_ttf)
 
@@ -403,17 +484,18 @@ def main():
     f_woff2.flavor = 'woff2'
     f_woff2.save(out_woff2)
 
-    # Also save Darpan-v5 and v4 aliases so test.html always loads them
-    v5_woff2 = os.path.join(out_dir, 'Darpan-v5.woff2')
-    v4_woff2 = os.path.join(out_dir, 'Darpan-v4.woff2')
-    if not os.path.exists(v5_woff2):
-        f_woff2.save(v5_woff2)
+    # Copy to fonts/ structure and root
+    fonts_dir = os.path.join(base_dir, 'fonts')
+    shutil.copy2(out_ttf, os.path.join(fonts_dir, 'ttf', 'Darpan-Regular.ttf'))
+    shutil.copy2(out_woff2, os.path.join(fonts_dir, 'woff2', 'Darpan-Regular.woff2'))
+    shutil.copy2(out_ttf, os.path.join(base_dir, 'Darpan-Regular.ttf'))
+    shutil.copy2(out_woff2, os.path.join(base_dir, 'Darpan-Regular.woff2'))
 
     ttf_kb = os.path.getsize(out_ttf) / 1024
     woff2_kb = os.path.getsize(out_woff2) / 1024
     print(f"Output sizes: TTF = {ttf_kb:.1f} KB | WOFF2 = {woff2_kb:.1f} KB")
 
-    # 5. Validate both languages
+    # 6. Validate languages
     validate_font(out_ttf)
 
 

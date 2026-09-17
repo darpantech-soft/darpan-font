@@ -79,6 +79,14 @@ These rules are injected into the **`half`** feature with **longest-match-first*
 ### 3.3 Automated Shirorekha Bridge
 Using font geometry analysis, we compute the average `yMax` of base consonants (~619 units) and programmatically append 45-unit rectangular contours across 486 conjunct glyphs, producing unbroken headlines.
 
+### 3.4 Aa-Matra Bindi & Chandrabindu Centering (Upstream Issue #5)
+In Yatra One, `dvmAA` (कानाचा दांडा `ा`) has an advance width of 269 units but lacked mark-to-base anchors or ligatures for `dvAnusvara` (`ं`) and `dvCandrabindu` (`ँ`). Consequently, in words like `चांद`, `पांव`, `हां`, `माँ`, `गाँव`, the bindi was positioned at the cursor origin after `dvmAA`'s advance, causing it to float 214 units to the right directly over the subsequent character.
+
+**Engineering Fix:**
+1. Measured `dvmAA` stem center at $x = 133$ and `dvAnusvara` center at $x = 78.5$.
+2. Synthesized composite ligatures `dvmAA_Anusvara` and `dvmAA_Candrabindu` placing the bindi at $x = 55$ (perfect alignment over the stem).
+3. Injected `dvmAA + dvAnusvara -> dvmAA_Anusvara` and `dvmAA + dvCandrabindu -> dvmAA_Candrabindu` into GSUB Lookup 17 (`abvs` feature), completely resolving the 4-year-old upstream issue.
+
 ---
 
 ## 4. Empirical Test Results

@@ -32,12 +32,14 @@ To solve this for [vanshflow.com](https://vanshflow.com) and the broader Marathi
 2. **482+ Injected 3-Glyph Conjunct Rules:** Direct longest-match-first ligature rules inside the `half` table, ensuring browser shaping engines form tight compound glyphs even before layout rules execute.
 3. **Automated Shirorekha Bridge:** 486 conjunct glyphs upgraded with clean connecting contour bars matching the natural brush thickness.
 4. **99.1% Pass Rate in Production:** Tested across 1,156 consonant pairs and deployed live on [vanshflow.com](https://vanshflow.com) with 100% verified conjunct formation.
-5. **Super-light Webfont:** Production `woff2` compressed to just **~69 KB**.
+5. **Super-light Webfont:** Production `woff2` compressed to just **~68 KB**.
+6. **Centered Bindi & Chandrabindu on 'Aa' Matra (Upstream Issue #5 Fixed):** In words like `चांद`, `पांव`, `हां`, `माँ`, `गाँव`, the bindi/chandrabindu is centered directly over the `dvmAA` stem using dedicated `abvs` composite ligatures (`dvmAA_Anusvara`, `dvmAA_Candrabindu`), preventing the 214-unit rightward drift.
 
 ### Before vs. After Comparison Table
 
-| Marathi Word | Original Yatra One (`lang="mr"`) | Darpan Regular (Production) | Result |
+| Word / Pattern | Original Yatra One | Darpan Regular & Family | Result |
 | :--- | :--- | :--- | :--- |
+| **`चांद, पांव, हां, माँ`** | ❌ Bindi shifted 214 units right over next letter | ✅ Bindi perfectly centered over Aa stem | **FIXED (Issue #5)** |
 | **`महाराष्ट्राच्या`** | ❌ `रा + ष् + ् + ट + ् + र + ...` (Multiple breaks) | ✅ `dvSSA + dvTTA + dvRA` (Unbroken ligature) | **FIXED** |
 | **`आश्चर्यकारक`** | ❌ `र् + क` (Reph broken with halant) | ✅ `dvKA + dvReph` (Proper top reph hook) | **FIXED** |
 | **`क्लिष्ट`** | ❌ `क् + ल् + ि + ष्ट` (Broken L-conjunct) | ✅ `dvK_LA` (Flawless ligature) | **FIXED** |

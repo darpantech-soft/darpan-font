@@ -518,8 +518,29 @@ html_content = f"""<!DOCTYPE html>
     </div>
 </div>
 
-<!-- SECTION 3: Exact Break Points Analysis -->
-<div class="section-title">📊 सविस्तर विश्लेषण: नेमके कुठे तुटते आहे? (Exact Break Points)</div>
+<!-- SECTION 3: Hindi & Devanagari Bindi / Chandrabindu Centering Fix (Issue #5) -->
+<div class="section-title">✨ परिच्छेद ३: काना + अनुस्वार व चंद्रबिंदू सुधारणा (Hindi Bindi & Chandrabindu Fix — Issue #5)</div>
+<p style="font-size:0.85rem; color:var(--muted); margin-bottom:1rem;">
+मूळ Yatra One मध्ये कानाच्या मात्रेवर (<code style="color:var(--accent);">dvmAA ा</code>) अनुस्वार किंवा चंद्रबिंदू असल्यास तो दांड्यापासून २१४ युनिट्स उजवीकडे पुढच्या अक्षरावर जात होता (उदा. <b>चांद, पांव, हां</b>). Darpan मध्ये हा OpenType दोष पूर्णपणे सोडवून बिंदी बरोबर कानाच्या दांड्यावर मध्यभागी (Centred) आणली आहे.
+</p>
+
+<div class="compare-grid">
+    <div class="font-card" style="border-left: 5px solid var(--green);">
+        <span class="font-badge badge-darpan">🟢 Darpan (कानाच्या दांड्यावर तंतोतंत मध्यभागी बिंदी — Centred Bindi)</span>
+        <div class="para-text darpan-font" style="font-size: 2.2rem; line-height: 1.8;">
+            चांद, पांव, हां, माँ, गाँव, दांत, सांस, बांस, जहां, वहां, कहां
+        </div>
+    </div>
+    <div class="font-card" style="border-left: 5px solid var(--red);">
+        <span class="font-badge badge-yatra">🔴 Yatra One (बिंदी उजवीकडे पुढच्या अक्षरावर ढकललेली — Shifted Right)</span>
+        <div class="para-text yatra-font" style="font-size: 2.2rem; line-height: 1.8;">
+            चांद, पांव, हां, माँ, गाँव, दांत, सांस, बांस, जहां, वहां, कहां
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 4: Exact Break Points Analysis -->
+<div class="section-title">📊 सविस्तर विश्लेषण: नेमके कुठे काय सुधारले? (Exact Break Points & Features)</div>
 <table class="diagnostics-table">
     <thead>
         <tr>
@@ -531,6 +552,13 @@ html_content = f"""<!DOCTYPE html>
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td><b>चांद, पांव, हां, माँ, गाँव</b></td>
+            <td>काना + अनुस्वार / चंद्रबिंदू (Hindi Bindi Issue #5)</td>
+            <td><span style="color:var(--green);">✅ दांड्यावर तंतोतंत मध्यभागी (Centred)</span></td>
+            <td><span style="color:var(--red);">❌ २१४ युनिट्स उजवीकडे ढकललेले</span></td>
+            <td>Darpan मध्ये <code>dvmAA_Anusvara</code> आणि <code>dvmAA_Candrabindu</code> लिगेचर जोडून <code>abvs</code> मध्ये अचूक केंद्रबिंदू दिला आहे.</td>
+        </tr>
         <tr>
             <td><b>कार्त्स्न्य</b></td>
             <td>५-व्यंजन समूह (र्+त्+स्+न्+य)</td>
