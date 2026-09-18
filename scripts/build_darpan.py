@@ -484,12 +484,10 @@ def main():
     f_woff2.flavor = 'woff2'
     f_woff2.save(out_woff2)
 
-    # Copy to fonts/ structure and root
+    # Copy to production fonts/ structure
     fonts_dir = os.path.join(base_dir, 'fonts')
     shutil.copy2(out_ttf, os.path.join(fonts_dir, 'ttf', 'Darpan-Regular.ttf'))
     shutil.copy2(out_woff2, os.path.join(fonts_dir, 'woff2', 'Darpan-Regular.woff2'))
-    shutil.copy2(out_ttf, os.path.join(base_dir, 'Darpan-Regular.ttf'))
-    shutil.copy2(out_woff2, os.path.join(base_dir, 'Darpan-Regular.woff2'))
 
     ttf_kb = os.path.getsize(out_ttf) / 1024
     woff2_kb = os.path.getsize(out_woff2) / 1024

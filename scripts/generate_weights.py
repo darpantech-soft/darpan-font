@@ -208,7 +208,9 @@ def validate_variant(ttf_path, weight_name):
 
 def main():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    base_font = os.path.join(base_dir, 'output', 'Darpan-Regular.ttf')
+    base_font = os.path.join(base_dir, 'fonts', 'ttf', 'Darpan-Regular.ttf')
+    if not os.path.exists(base_font):
+        base_font = os.path.join(base_dir, 'output', 'Darpan-Regular.ttf')
 
     if not os.path.exists(base_font):
         print(f"Error: Base font not found at {base_font}")
@@ -233,16 +235,12 @@ def main():
     for name, wclass, panose, ox, oy, adv_ext in weights_config:
         ttf_path, woff2_path = create_weight_variant(base_font, out_dir, name, wclass, panose, ox, oy, adv_ext)
         
-        # Copy to fonts/ structure
+        # Copy to production fonts/ structure
         import shutil
         dest_ttf = os.path.join(ttf_dir, os.path.basename(ttf_path))
         dest_woff2 = os.path.join(woff2_dir, os.path.basename(woff2_path))
         shutil.copy2(ttf_path, dest_ttf)
         shutil.copy2(woff2_path, dest_woff2)
-        
-        # Also copy to root for direct local loading
-        shutil.copy2(ttf_path, os.path.join(base_dir, os.path.basename(ttf_path)))
-        shutil.copy2(woff2_path, os.path.join(base_dir, os.path.basename(woff2_path)))
 
     print("\n🎉 All font weights generated and distributed successfully!")
 

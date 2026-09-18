@@ -13,3 +13,6 @@ Thumbs.db
 
 # Scratch and test caches
 scratch/
+
+# Build artifacts (releases live in fonts/)
+output/
