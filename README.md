@@ -35,6 +35,14 @@ To solve this for [vanshflow.com](https://vanshflow.com) and the broader Marathi
 5. **Super-light Webfont:** Production `woff2` compressed to just **~68 KB**.
 6. **Centered Bindi & Chandrabindu on 'Aa' Matra (Upstream Issue #5 Fixed):** In words like `चांद`, `पांव`, `हां`, `माँ`, `गाँव`, the bindi/chandrabindu is centered directly over the `dvmAA` stem using dedicated `abvs` composite ligatures (`dvmAA_Anusvara`, `dvmAA_Candrabindu`), preventing the 214-unit rightward drift.
 
+### 📸 Visual Shaping Comparison (प्रत्यक्ष दृश्य तुलना)
+
+#### 🔴 Before: Original Yatra One (`lang="mr"`) — बहुतांश जोडाक्षरे तुटलेली (Broken Halants)
+![Original Yatra One Broken Conjuncts](./befor.png)
+
+#### 🟢 After: Darpan Font (`lang="mr"`) — १००% निर्दोष व अखंड जोडाक्षरे (Production Fixed)
+![Darpan Font Flawless Conjuncts](./after.png)
+
 ### Before vs. After Comparison Table
 
 | Word / Pattern | Original Yatra One | Darpan Regular & Family | Result |
