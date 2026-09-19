@@ -757,10 +757,7 @@ weightSelect.addEventListener('change', (e) => {{
 </html>
 """
 
-with open('freshtest.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
-
 with open('index.html', 'w', encoding='utf-8') as f:
     f.write(html_content)
 
-print(f"Successfully updated freshtest.html and index.html with all 4 weights ({len(html_content)} bytes).")
+print(f"Successfully updated index.html with all 4 weights ({len(html_content)} bytes).")

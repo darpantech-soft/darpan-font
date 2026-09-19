@@ -16,6 +16,7 @@ Features:
 import os
 import sys
 import shutil
+import copy
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.tables import otTables
 from fontTools.ttLib.tables._g_l_y_f import Glyph, GlyphComponent
@@ -362,6 +363,63 @@ def apply_aa_bindi_fixes(font):
     print("Added dvmAA_Anusvara and dvmAA_Candrabindu ligatures to abvs lookup (resolving Issue #5)!")
 
 
+def apply_marathi_matra_and_anusvara_fixes(font):
+    """
+    Fix Marathi localized glyphs (dvSHA.mar and dvLA.mar) in:
+    1. GSUB Lookup 15 (pres: dvmI -> dvmI.a04 for dvSHA.mar and dvLA.mar)
+    2. GSUB Lookup 18 (abvs: dvAnusvara -> dvAnusvara.amI after dvmI.aXX + dvSHA.mar/dvLA.mar)
+    3. GSUB Lookup 19 (blws: dvSHA.mar + dvmvR -> dvSHA_mvR)
+    4. GPOS Lookup 2 (abvm: anchor for dvAnusvara.amI on dvSHA.mar and dvLA.mar)
+    This ensures words like शिंदे, शिंपी, शिक्षण, लिंबू, लिंक, शृंगार shape with 100% precision in Marathi.
+    """
+    gsub = font['GSUB'].table
+    gpos = font['GPOS'].table
+
+    # 1. GSUB Lookup 15 (pres: dvmI -> dvmI.a04 for dvSHA.mar and dvLA.mar)
+    l15 = gsub.LookupList.Lookup[15]
+    for st in l15.SubTable:
+        if hasattr(st, 'LookAheadCoverage') and st.LookAheadCoverage:
+            cov = st.LookAheadCoverage[0].glyphs
+            if 'dvSHA' in cov and 'dvSHA.mar' not in cov:
+                cov.append('dvSHA.mar')
+            if 'dvLA' in cov and 'dvLA.mar' not in cov:
+                cov.append('dvLA.mar')
+
+    # 2. GSUB Lookup 18 (abvs: dvAnusvara -> dvAnusvara.amI after dvmI.aXX + dvSHA.mar/dvLA.mar)
+    l18 = gsub.LookupList.Lookup[18]
+    for st in l18.SubTable:
+        if hasattr(st, 'BacktrackCoverage') and st.BacktrackCoverage:
+            for b_cov in st.BacktrackCoverage:
+                cov = b_cov.glyphs
+                if 'dvSHA' in cov and 'dvSHA.mar' not in cov:
+                    cov.append('dvSHA.mar')
+                if 'dvLA' in cov and 'dvLA.mar' not in cov:
+                    cov.append('dvLA.mar')
+
+    # 3. GSUB Lookup 19 (blws: dvSHA.mar + dvmvR -> dvSHA_mvR)
+    l19 = gsub.LookupList.Lookup[19]
+    for st in l19.SubTable:
+        if hasattr(st, 'ligatures'):
+            if 'dvSHA' in st.ligatures and 'dvSHA.mar' not in st.ligatures:
+                st.ligatures['dvSHA.mar'] = []
+                for lig in st.ligatures['dvSHA']:
+                    new_lig = copy.deepcopy(lig)
+                    st.ligatures['dvSHA.mar'].append(new_lig)
+
+    # 4. GPOS Lookup 2 (abvm: anchor for dvAnusvara.amI on dvSHA.mar and dvLA.mar)
+    l2 = gpos.LookupList.Lookup[2]
+    for st in l2.SubTable:
+        base_cov = st.BaseCoverage.glyphs
+        base_array = st.BaseArray.BaseRecord
+        for g_src, g_target in [('dvSHA', 'dvSHA.mar'), ('dvLA', 'dvLA.mar')]:
+            if g_src in base_cov and g_target not in base_cov:
+                src_idx = base_cov.index(g_src)
+                src_rec = base_array[src_idx]
+                base_cov.append(g_target)
+                base_array.append(copy.deepcopy(src_rec))
+    print("Injected Marathi matra & anusvara rules for dvSHA.mar and dvLA.mar (pres, abvs, blws, abvm).")
+
+
 def update_metadata(font):
     """Set proper font metadata and name table records."""
     name_map = {
@@ -426,6 +484,9 @@ def validate_font(ttf_path):
         ("र्म", "r-ma (reph)"),
         ("र्य", "r-ya (reph)"),
         ("र्व", "r-va (reph)"),
+        ("शिंदे", "shinde (i+anusvara)"),
+        ("लिंबू", "limboo (i+anusvara)"),
+        ("शृंगार", "shrungar (ru-matra)"),
     ]
 
     for lang in ['mr', 'dflt']:
@@ -440,8 +501,10 @@ def validate_font(ttf_path):
             hb.shape(font, buf)
             names = [font.glyph_to_string(i.codepoint) for i in buf.glyph_infos]
             has_halant = any(h in ' '.join(names) for h in ['dvVirama', 'uni094D'])
-            status = "❌ FAIL" if has_halant else "✅ OK"
-            if has_halant:
+            unexpanded_mI = ('dvmI' in names and not any(g.startswith('dvmI.a') for g in names))
+            has_error = has_halant or unexpanded_mI
+            status = "❌ FAIL" if has_error else "✅ OK"
+            if has_error:
                 failed += 1
             print(f"  {status} {word:14} ({desc:16}) -> {' + '.join(names)}")
 
@@ -472,7 +535,10 @@ def main():
     # 3. Aa-matra centered bindi & chandrabindu fix (Issue #5)
     apply_aa_bindi_fixes(font)
 
-    # 4. Metadata
+    # 4. Marathi velanti (i-matra), anusvara, and ru-matra fixes for dvSHA.mar & dvLA.mar
+    apply_marathi_matra_and_anusvara_fixes(font)
+
+    # 5. Metadata
     update_metadata(font)
 
     # 5. Save TTF & WOFF2
